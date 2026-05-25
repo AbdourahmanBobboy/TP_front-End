@@ -1,39 +1,30 @@
-import { useState, useEffect } from 'react';
 import TaskCard from '../components/TaskCard';
 import TaskForm from '../components/TaskForm';
+import useLocalStorage from '../hooks/useLocalStorage';
 import './Dashboard.css';
 
 function Dashboard() {
-  const [tasks, setTasks] = useState(() => {
-    const savedTasks = localStorage.getItem('taskflow_data');
-    if (savedTasks) {
-      return JSON.parse(savedTasks);
+  // Utilisation du hook personnalisé au lieu de useState + useEffect
+  const [tasks, setTasks] = useLocalStorage('taskflow_data', [
+    {
+      id: 1,
+      titre: "Conception de l'ontologie",
+      description: "Rédiger les axiomes de base du domaine.",
+      statut: "A faire"
+    },
+    {
+      id: 2,
+      titre: "Développement du composant Dashboard",
+      description: "Créer l'interface principale avec les cartes de tâches",
+      statut: "En cours"
+    },
+    {
+      id: 3,
+      titre: "Documentation du projet",
+      description: "Rédiger le README et la documentation technique",
+      statut: "Termine"
     }
-    return [
-      {
-        id: 1,
-        titre: "Conception de l'ontologie",
-        description: "Rédiger les axiomes de base du domaine.",
-        statut: "A faire"
-      },
-      {
-        id: 2,
-        titre: "Développement du composant Dashboard",
-        description: "Créer l'interface principale avec les cartes de tâches",
-        statut: "En cours"
-      },
-      {
-        id: 3,
-        titre: "Documentation du projet",
-        description: "Rédiger le README et la documentation technique",
-        statut: "Termine"
-      }
-    ];
-  });
-
-  useEffect(() => {
-    localStorage.setItem('taskflow_data', JSON.stringify(tasks));
-  }, [tasks]);
+  ]);
 
   const handleAddTask = (newTask) => {
     setTasks([...tasks, newTask]);
